@@ -1,0 +1,5 @@
+bigdl-llm==2.4.0b20231017
+faiss
+gradio
+transformers==4.31.0
+langchain==0.0.248
