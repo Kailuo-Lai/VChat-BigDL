@@ -1,2 +1,5 @@
+# exclude everything
 checkpoints/*
-!temp
+
+# exception to the rule
+!checkpoints/.gitkeep 
