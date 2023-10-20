@@ -106,7 +106,7 @@ def subvid_fn(bvid):
     shutil.rmtree('./temp/bilibili_video')  
     os.mkdir('./temp/bilibili_video')
     save_path = download_bilibili_video(bvid)
-    return gr.update(value=save_path), '', gr.update(value=None, interactive=True), None, gr.update(value=None, visible=True)
+    return gr.update(value=save_path), '', None, gr.update(value=None, visible=True)
 
 css = """
       #col-container {max-width: 80%; margin-left: auto; margin-right: auto;}
@@ -157,7 +157,7 @@ with gr.Blocks(css=css) as demo:
     btn_clean_chat_history.click(clean_chat_history, [], [input_message, chatbot])
     log_btn.click(log_fn, [video_inp, lid_choice], [log_outp])
     vmax_slider.release(vmax_change, [vmax_slider], [])
-    vidsub_btn.click(subvid_fn, [video_id], [video_inp, input_message, video_inp, chatbot, log_outp])
+    vidsub_btn.click(subvid_fn, [video_id], [video_inp, input_message, chatbot, log_outp])
 
     demo.load(queur=False)
 
