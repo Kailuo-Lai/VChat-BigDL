@@ -162,5 +162,5 @@ with gr.Blocks(css=css) as demo:
     demo.load(queur=False)
 
 
-demo.queue(concurrency_count=10)
+demo.queue(concurrency_count=1)
 demo.launch(height='800px', server_port=args.port, debug=True, share=True)
