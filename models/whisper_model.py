@@ -9,7 +9,7 @@ def has_intersection(t1, t2):
 
 class AudioTranslator():
     def __init__(self, args):
-        self.model = whisper.load_model(args.whisper_version)
+        self.model = whisper.load_model(args.whisper_version, download_root='checkpoints/')
         self.model = optimize_model(self.model)
 
     def __call__(self, video_path):

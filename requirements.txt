@@ -1,5 +1,14 @@
-bigdl-llm==2.4.0b20231017
-faiss
+bigdl-llm[all]
+git+https://github.com/openai/whisper.git
+faiss-cpu
 gradio
 transformers==4.31.0
 langchain==0.0.248
+timm
+fairscale
+douyin_tiktok_scraper
+opencv-python==4.8.1.78
+accelerate==0.21.0
+scipy==1.11.3
+py-cpuinfo==9.0.0
+sentencepiece==0.1.99

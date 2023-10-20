@@ -1,8 +1,5 @@
-import nest_asyncio
 import requests
 import asyncio
-from douyin_tiktok_scraper.scraper import Scraper
-nest_asyncio.apply()
 
 api = Scraper()
 
