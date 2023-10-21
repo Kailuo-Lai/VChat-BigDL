@@ -17,22 +17,22 @@ Powered by BigDL, Llama, Clip, Whisper, Tag2Text, Helsinki, LangChain and inspir
 <tr>
 <td>
     <video width="380" height="400" muted autoplay="autoplay" loop="loop">
-    <source src="Data/demo/demo2.mp4" type="video/mp4">
+    <source src="data/demo/demo2.mp4" type="video/mp4">
     </video>
 </td>
 <td>
     <video width="380" height="400" muted autoplay="autoplay" loop="loop">
-    <source src="Data/demo/demo1.mp4" type="video/mp4">
+    <source src="data/demo/demo1.mp4" type="video/mp4">
     </video>
 </td>
 </tr>
 </tr>
 <tr>
 <td>
-<img src="Data/demo/zh2en demo.png" >
+<img src="data/demo/zh2en demo.png" >
 </td>
 <td>
-<img src="Data/demo/en2zh demo.png" >
+<img src="data/demo/en2zh demo.png" >
 </td>
 </tr>
 </tr>
