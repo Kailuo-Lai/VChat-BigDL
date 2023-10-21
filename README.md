@@ -66,13 +66,13 @@ Could not create share link. Missing file: D:\anaconda3\envs\vchat\lib\site-pack
 
 Please check your internet connection. This can happen if your antivirus software blocks the download of this file. You can install manually by following these steps:
 
-1. Download this file: https://cdn-media.huggingface.co/frpc-gradio-0.2/frpc_windows_amd64.exe,
-2. Rename the downloaded file to: frpc_windows_amd64_v0.2,
-3. Move the file to this location: .\anaconda3\envs\vchat\lib\site-packages\gradio,
+1. Download this file: https://cdn-media.huggingface.co/frpc-gradio-0.2/frpc_windows_amd64.exe.
+2. Rename the downloaded file to: frpc_windows_amd64_v0.2.
+3. Move the file to this location: .\anaconda3\envs\vchat\lib\site-packages\gradio.
 
 #### 2. One by One
 
-Multiple people using the same demo at the same time will cause an error because the asynchronous running logic is not implemented,
+Multiple people using the same demo at the same time will cause an error because the asynchronous running logic is not implemented.
 
 
 ## Acknowledge
