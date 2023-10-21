@@ -8,7 +8,12 @@ Powered by BigDL, Llama, Clip, Whisper, Tag2Text, Helsinki, LangChain and inspir
 
 ## Demo
 
-<center>
+|English|Chinese|
+|:-:|:-:|
+|![](data/demo/demo2.gif)|![](data/demo/demo1.gif)|
+|![](data/demo/zh2en%20demo.png)|![](data/demo/en2zh%20demo.png)|
+
+<!-- <center>
 <table width="100%">
 <tr>
 <td align="center" colspan="1">English</td>
@@ -37,7 +42,7 @@ Powered by BigDL, Llama, Clip, Whisper, Tag2Text, Helsinki, LangChain and inspir
 </tr>
 </tr>
 </table>
-</center>
+</center> -->
 
 ## Environment Preparing
 
