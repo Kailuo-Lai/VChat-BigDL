@@ -13,37 +13,6 @@ Powered by BigDL, Llama, Clip, Whisper, Tag2Text, Helsinki, LangChain and inspir
 |![](data/demo/demo2.gif)|![](data/demo/demo1.gif)|
 |![](data/demo/zh2en%20demo.png)|![](data/demo/en2zh%20demo.png)|
 
-<!-- <center>
-<table width="100%">
-<tr>
-<td align="center" colspan="1">English</td>
-<td align="center" colspan="1">Chinese</td>
-</tr>
-<tr>
-<td>
-    <video width="380" height="400" muted autoplay="autoplay" loop="loop">
-    <source src="data/demo/demo2.mp4" type="video/mp4">
-    </video>
-</td>
-<td>
-    <video width="380" height="400" muted autoplay="autoplay" loop="loop">
-    <source src="data/demo/demo1.mp4" type="video/mp4">
-    </video>
-</td>
-</tr>
-</tr>
-<tr>
-<td>
-<img src="data/demo/zh2en demo.png" >
-</td>
-<td>
-<img src="data/demo/en2zh demo.png" >
-</td>
-</tr>
-</tr>
-</table>
-</center> -->
-
 ## Environment Preparing
 
 ### System ---Windows
