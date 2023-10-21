@@ -1,5 +1,6 @@
 import requests
 import asyncio
+from douyin_tiktok_scraper.scraper import Scraper
 
 api = Scraper()
 
