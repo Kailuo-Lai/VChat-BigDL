@@ -8,7 +8,7 @@ Powered by BigDL, Llama, Clip, Whisper, Tag2Text, Helsinki, LangChain and inspir
 
 ## Demo
 
-|English|Chinese|
+|[English](data/demo/demo2.mp4)|[Chinese](data/demo/demo1.mp4)|
 |:-:|:-:|
 |![](data/demo/demo2.gif)|![](data/demo/demo1.gif)|
 |![](data/demo/zh2en%20demo.png)|![](data/demo/en2zh%20demo.png)|
