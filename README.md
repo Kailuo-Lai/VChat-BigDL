@@ -1,6 +1,6 @@
 # 🤖 VChat-BigDL: A ChatBot for Video Understanding Based on BigDL
 
-Powered by BigDL, Llama, Clip, Whisper, Tag2Text, Helsinki, LangChain and inspired by showlab/log, we turn a video into a long document which records visual and audio information. Then we can chat over the record only using Intel CPU.
+Powered by BigDL, Llama, Clip, Whisper, Tag2Text, Helsinki, LangChain and inspired by showlab/Vlog, we turn a video into a long document which records visual and audio information. Then we can chat over the record only using Intel CPU.
 
 ## Pipeline
 
