@@ -16,13 +16,18 @@ class VChat:
     
     def init_model(self):
         print('\033[1;33m' + "Initializing models...".center(50, '-') + '\033[0m')
+        print('\033[1;36m' + "Initializing CLIP model...".center(50, '-') + '\033[0m')
         self.feature_extractor = FeatureExtractor(self.args)
         self.video_segmenter = VideoSegmentor(self.args)
+        print('\033[1;36m' + "Initializing Tag2Text model...".center(50, '-') + '\033[0m')
         self.image_captioner_detector = ImageCaptionerDetector(self.args)
+        print('\033[1;36m' + "Initializing Whisper model...".center(50, '-') + '\033[0m')
         self.audio_translator = AudioTranslator(self.args)
+        print('\033[1;36m' + "Initializing LLM...".center(50, '-') + '\033[0m')
         self.llm_reasoner = LlmReasoner(self.args)
+        print('\033[1;36m' + "Initializing Translate model...".center(50, '-') + '\033[0m')
         self.translator_en_zh = Translator(convert_lid="en-zh")
-        self.translator_zh_en = Translator(convert_lid="zh-en")
+        # self.translator_zh_en = Translator(convert_lid="zh-en")
         
         print('\033[1;32m' + "Model initialization finished!".center(50, '-') + '\033[0m')
         
@@ -75,26 +80,26 @@ class VChat:
         # return en_log_result
         return en_log_result, zh_log_result
         
-    def chat2video(self, user_input, lid):
-        """
-        lid: language id of user input (e.g., "en", "zh")
-        """
-        if lid == "zh":
-            en_user_input = self.translator_zh_en(user_input)
-        else:
-            en_user_input = user_input
+    def chat2video(self, user_input):
+        # """
+        # lid: language id of user input (e.g., "en", "zh")
+        # """
+        # if lid == "zh":
+        #     en_user_input = self.translator_zh_en(user_input)
+        # else:
+        #     en_user_input = user_input
             
         print("\n\033[1;32mGnerating response...\033[0m")
-        answer, generated_question, source_documents = self.llm_reasoner(en_user_input)
+        answer, generated_question, source_documents, lid = self.llm_reasoner(user_input)
         print(f"\033[1;32mQuestion: \033[0m{user_input}")
         print(f"\033[1;32mAnswer: \033[0m{answer[0][1]}")
         self.clean_history()
         
-        if lid == "zh":
-            answer[0][0] = user_input
-            answer[0][1] = self.translator_en_zh(answer[0][1])
+        # if lid == "zh":
+        #     answer[0][0] = user_input
+        #     answer[0][1] = self.translator_en_zh(answer[0][1])
         
-        return answer, generated_question, source_documents
+        return answer, generated_question, source_documents, lid
 
     def clean_history(self):
         self.llm_reasoner.clean_history()

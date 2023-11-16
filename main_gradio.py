@@ -28,16 +28,19 @@ parser.add_argument("--tag2text_thershld", default=0.68, type=float, help="Thres
 
 # whisper model arguments
 parser.add_argument("--whisper_version", default="medium", help="Whisper model version for video asr")
+parser.add_argument("--whisper_low_bit", default=False, action="store_true", help="load whisper low bit model or not")
 
 # llm model arguments
-parser.add_argument("--llm_version", default="Llama-2-7b-chat-hf-INT4", help="LLM model version")
-parser.add_argument("--embed_version", default="all-MiniLM-L12-v2", help="Embedding model version")
+parser.add_argument("--llm_version", default="chatglm3-6b-32k-INT4", help="LLM model version")
+parser.add_argument("--en_embed_version", default="all-MiniLM-L12-v2", help="English embedding model version")
+parser.add_argument("--zh_embed_version", default="bge-small-zh-v1.5", help="Chinese embedding model version")
 parser.add_argument("--top_k", default=3, type=int, help="Return top k relevant contexts to llm")
 parser.add_argument("--qa_max_new_tokens", default=128, type=int, help="Number of max new tokens for llm")
 
 # general arguments
 parser.add_argument("--port", type = int, default = 8899, help = "Gradio server port")
 parser.add_argument("--lid", default="en", choices=['en', 'zh'], help="which language do you want use during conversation")
+parser.add_argument("--mode", default="normal", choices=["debug", "normal"], help="which mode do you want to run, debug or normal. Debug: More detailed output")
 
 args = parser.parse_args()
 print(args)
@@ -64,12 +67,14 @@ def clean_chat_history():
     global_chat_history = []
     return '', None
 
-def submit_message(message, lid):
-    chat_history, generated_question, source_documents = vchat.chat2video(message, lid)
+def submit_message(message):
+    chat_history, generated_question, source_documents, lid = vchat.chat2video(message)
     global_chat_history.append((message, chat_history[0][1]))
     source_documents = "".join([x.page_content for x in source_documents])
-    return '', global_chat_history
-    
+    if args.mode == "debug":
+        return '', global_chat_history, gr.update(value=message + "\n" + source_documents + "\n" + generated_question + "\n" + lid, visible=True)
+    else:
+        return '', global_chat_history
 
 def log_fn(vid_path, lid):
     print(vid_path)
@@ -149,10 +154,17 @@ with gr.Blocks(css=css) as demo:
                 log_btn = gr.Button("Generate Video Document")
                 log_outp = gr.Textbox(label="Document output\nPlease be patient", lines=40)
                 total_tokens_str = gr.Markdown(elem_id="total_tokens_str")
+            if args.mode == "debug":
+                debug_info = gr.Textbox(label="Debug info", lines=10)
+
 
     lid_choice.change(lid_change, [lid_choice], [log_outp, input_message, chatbot])
-    btn_submit.click(submit_message, [input_message, lid_choice], [input_message, chatbot])
-    input_message.submit(submit_message, [input_message, lid_choice], [input_message, chatbot])
+    if args.mode == "debug":
+        btn_submit.click(submit_message, [input_message], [input_message, chatbot, debug_info])
+        input_message.submit(submit_message, [input_message], [input_message, chatbot, debug_info])
+    else:
+        btn_submit.click(submit_message, [input_message], [input_message, chatbot])
+        input_message.submit(submit_message, [input_message], [input_message, chatbot])
     btn_clean_conversation.click(clean_conversation, [], [input_message, video_inp, chatbot, log_outp])
     btn_clean_chat_history.click(clean_chat_history, [], [input_message, chatbot])
     log_btn.click(log_fn, [video_inp, lid_choice], [log_outp])

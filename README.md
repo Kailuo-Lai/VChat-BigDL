@@ -20,8 +20,9 @@ Powered by BigDL, Llama, Clip, Whisper, Tag2Text, Helsinki, LangChain and inspir
 #### 1. Create Conda Environment
 
 ```bash
-conda  create -n vchat python=3.9 -y
-activate vchat
+conda create -n vchat python=3.9 -y
+conda activate vchat
+cd VChat-BigDL
 pip install -r ./requirements.txt
 ```
 #### 2. Install FFmpeg
@@ -42,10 +43,10 @@ python download_ckpt.py
 
 **✅Please save weights to ./checkpoints.**
 
-#### 4. Optimaize LLM
+#### 4. Optimaize Models
 
 ```bash
-python LLM_low_bit_optimize.py
+python model_low_bit_optimize.py
 ```
 
 #### 5. Run with Gradio
