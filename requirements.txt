@@ -12,3 +12,6 @@ accelerate==0.21.0
 scipy==1.11.3
 py-cpuinfo==9.0.0
 sentencepiece==0.1.99
+typing_extensions==4.8.0
+httpx==0.23.0
+langid

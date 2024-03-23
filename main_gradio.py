@@ -28,16 +28,17 @@ parser.add_argument("--tag2text_thershld", default=0.68, type=float, help="Thres
 
 # whisper model arguments
 parser.add_argument("--whisper_version", default="medium", help="Whisper model version for video asr")
+parser.add_argument("--whisper_low_bit", default=False, action="store_true", help="load whisper low bit model or not")
 
 # llm model arguments
-parser.add_argument("--llm_version", default="Llama-2-7b-chat-hf-INT4", help="LLM model version")
-parser.add_argument("--embed_version", default="all-MiniLM-L12-v2", help="Embedding model version")
+parser.add_argument("--llm_version", default="chatglm3-6b-32k-INT4", help="LLM model version")
+parser.add_argument("--embed_version", default="multilingual-e5-large", help="Embedding model version")
 parser.add_argument("--top_k", default=3, type=int, help="Return top k relevant contexts to llm")
-parser.add_argument("--qa_max_new_tokens", default=128, type=int, help="Number of max new tokens for llm")
+parser.add_argument("--qa_max_new_tokens", default=1024, type=int, help="Number of max new tokens for llm")
 
 # general arguments
 parser.add_argument("--port", type = int, default = 8899, help = "Gradio server port")
-parser.add_argument("--lid", default="en", choices=['en', 'zh'], help="which language do you want use during conversation")
+parser.add_argument("--mode", default="normal", choices=["debug", "normal"], help="Which mode do you want to run, debug or normal. Debug: More detailed output")
 
 args = parser.parse_args()
 print(args)
@@ -46,9 +47,7 @@ vchat = VChat(args)
 vchat.init_model()
 
 global_chat_history = []
-global_lid = args.lid
 global_en_log_result = ""
-global_zh_log_result = ""
 
 def clean_conversation():
     global global_chat_history
@@ -64,42 +63,28 @@ def clean_chat_history():
     global_chat_history = []
     return '', None
 
-def submit_message(message, lid):
-    chat_history, generated_question, source_documents = vchat.chat2video(message, lid)
+def submit_message(message):
+    chat_history, generated_question, source_documents, lid = vchat.chat2video(message)
     global_chat_history.append((message, chat_history[0][1]))
     source_documents = "".join([x.page_content for x in source_documents])
-    return '', global_chat_history
-    
+    if args.mode == "debug":
+        return '', global_chat_history, gr.update(value=message + "\n" + source_documents + "\n" + generated_question + "\n" + lid, visible=True)
+    else:
+        return '', global_chat_history
 
-def log_fn(vid_path, lid):
+def log_fn(vid_path):
     print(vid_path)
     global global_en_log_result
-    global global_zh_log_result
     if vid_path is None:
         log_text = "====== Please upload video or provide bilibili_BVid 🙃====="
         gr.update(value=log_text, visible=True)
     else:
-        global_en_log_result, global_zh_log_result = vchat.video2log(vid_path)
-        if lid == "en":
-            return gr.update(value=global_en_log_result, visible=True)
-        elif lid == "zh":
-            return   gr.update(value=global_zh_log_result, visible=True)
+        global_en_log_result = vchat.video2log(vid_path)
+        return gr.update(value=global_en_log_result, visible=True)
 
 def vmax_change(vmax):
     vchat.video_segmenter.vmax = vmax
     print(f"\033[35;1mvmax={vchat.video_segmenter.vmax}" + '\033[0m')
-    
-def lid_change(lid):
-    global global_chat_history
-    vchat.clean_history()
-    global_chat_history = []
-    print(f"\033[31;1mChange to {lid}\033[0m")
-    if lid == "en":
-        global global_en_log_result
-        return gr.update(value=global_en_log_result, visible=True), '', None
-    elif lid == "zh":
-        global global_zh_log_result
-        return gr.update(value=global_zh_log_result, visible=True), '', None
 
 def subvid_fn(bvid):
     print(bvid)
@@ -125,7 +110,6 @@ with gr.Blocks(css=css) as demo:
                     Powered by BigDL, Llama, Clip, Whisper, Tag2Text, Helsinki and LangChain
                     Inspired by showlab/log""",
                     elem_id="header")
-        lid_choice = gr.Dropdown(choices=["en", "zh"], value="en", label="Choose language")
 
         with gr.Row():
             with gr.Column():
@@ -149,13 +133,18 @@ with gr.Blocks(css=css) as demo:
                 log_btn = gr.Button("Generate Video Document")
                 log_outp = gr.Textbox(label="Document output\nPlease be patient", lines=40)
                 total_tokens_str = gr.Markdown(elem_id="total_tokens_str")
+        if args.mode == "debug":
+            debug_info = gr.Textbox(label="Debug info", lines=10)
 
-    lid_choice.change(lid_change, [lid_choice], [log_outp, input_message, chatbot])
-    btn_submit.click(submit_message, [input_message, lid_choice], [input_message, chatbot])
-    input_message.submit(submit_message, [input_message, lid_choice], [input_message, chatbot])
+    if args.mode == "debug":
+        btn_submit.click(submit_message, [input_message], [input_message, chatbot, debug_info])
+        input_message.submit(submit_message, [input_message], [input_message, chatbot, debug_info])
+    else:
+        btn_submit.click(submit_message, [input_message], [input_message, chatbot])
+        input_message.submit(submit_message, [input_message], [input_message, chatbot])
     btn_clean_conversation.click(clean_conversation, [], [input_message, video_inp, chatbot, log_outp])
     btn_clean_chat_history.click(clean_chat_history, [], [input_message, chatbot])
-    log_btn.click(log_fn, [video_inp, lid_choice], [log_outp])
+    log_btn.click(log_fn, [video_inp], [log_outp])
     vmax_slider.release(vmax_change, [vmax_slider], [])
     vidsub_btn.click(subvid_fn, [video_id], [video_inp, input_message, chatbot, log_outp])
 
